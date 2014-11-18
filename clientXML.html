@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<style>
+			div.chave ul {
+				display:inline-block;
+			}
+			div.chave ul li {
+				display:inline-block;
+			}
+			div.chave ul li {
+				margin : 5px;
+				border-style:solid;
+				border-color:black;
+				border-width:2px;
+				width:20px;
+				height:20px;
+				border-radius:5px;
+				text-align:center;
+			}
+			div.chave ul.numbers li {
+				background-color: lime;
+			}
+			div.chave ul.stars li {
+				background-color: yellow;
+			}
+		</style>
+		<script src="jquery/jquery-2.1.1.js"></script>
+		<script>
+			// a execucao de DOM scripting apenas apos o documento ester pronto
+			$(document).ready( function () {
+				$("#blimpar").click(function () {
+					$("#divchaves").empty();
+					//$("#divchaves").html("");
+				});
+				
+				$("#bobter").click( function () {
+					$.ajax(
+						{
+							//url: "http://www.estg.ipvc.pt/~pmoreira/sir/euro/getKeyXML.php",
+							url : "getKey.php",
+							type : "GET",
+							dataType : "xml",
+							data : {
+								format: "xml"
+							},
+							success : function (dados) {
+								novodiv = $("<div/>").addClass("chave");
+								listan = $("<ul/>").addClass("numbers");
+								listas = $("<ul/>").addClass("stars");
+								// dados.numbers
+								//alert($(dados).find("numbers>ke"));
+								
+								$.each($(dados).find("numbers>ke"), function(idx,val) {
+									li = $("<li/>").html($(val).text());
+									listan.append(li);
+								});
+								$.each($(dados).find("stars>ke"), function(idx,val) {
+									li = $("<li/>").html($(val).text());
+									listas.append(li);
+								});
+											
+								novodiv.append(listan);
+								novodiv.append(listas);
+								$("#divchaves").append(novodiv);
+							}
+						}
+					);
+					
+				})
+			});
+		</script>
+	</head>
+	<body>
+		<div id="divbotoes">
+			<input type="button" id="bobter" value="obter chave"/>
+			<input type="button" id="blimpar" value="limpar chaves"/>
+		</div>
+		<div id="divchaves">
+			xxxx xxxx xxxx xxxx 
+		</div>
+	</body>
+</html>
